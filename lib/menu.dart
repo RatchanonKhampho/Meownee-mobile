@@ -15,11 +15,10 @@ class Menu extends StatefulWidget {
   State<Menu> createState() => _MenuState();
 }
 
-class _MenuState extends State<Menu> with SingleTickerProviderStateMixin {
+class _MenuState extends State<Menu> {
   List<Widget> pages = <Widget>[];
   int _currentPage = 0;
   DateTime? currentBackPressTime;
-  dynamic futureNotificationTire;
 
   @override
   void initState() {
@@ -28,22 +27,21 @@ class _MenuState extends State<Menu> with SingleTickerProviderStateMixin {
   }
 
   void _onItemTapped(int index) {
-    setState(() {
-      _currentPage = index;
-    });
+    setState(() => _currentPage = index);
   }
 
   void _onAddButtonPressed() {
-    // TODO: เพิ่มฟังก์ชันเพิ่มรายการรับ/จ่าย
     print('Add new transaction');
   }
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Scaffold(
       extendBody: true,
       resizeToAvoidBottomInset: true,
-      backgroundColor: const Color(0xFFF5F7FA),
+      backgroundColor: theme.scaffoldBackgroundColor,
       body: GestureDetector(
         onTap: () => FocusScope.of(context).unfocus(),
         child: WillPopScope(
@@ -51,8 +49,8 @@ class _MenuState extends State<Menu> with SingleTickerProviderStateMixin {
           child: IndexedStack(index: _currentPage, children: pages),
         ),
       ),
-      bottomNavigationBar: _buildBottomNavBar(),
-      floatingActionButton: _buildFloatingAddButton(),
+      bottomNavigationBar: _buildBottomNavBar(context),
+      floatingActionButton: _buildFloatingAddButton(context),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
   }
@@ -64,7 +62,6 @@ class _MenuState extends State<Menu> with SingleTickerProviderStateMixin {
       currentBackPressTime = now;
       Fluttertoast.showToast(
         msg: 'กดอีกครั้งเพื่อออก',
-        toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.BOTTOM,
       );
       return Future.value(false);
@@ -72,7 +69,10 @@ class _MenuState extends State<Menu> with SingleTickerProviderStateMixin {
     return Future.value(true);
   }
 
-  Widget _buildFloatingAddButton() {
+  // ===== Floating Button =====
+  Widget _buildFloatingAddButton(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
+
     return Container(
       width: 64,
       height: 64,
@@ -82,11 +82,11 @@ class _MenuState extends State<Menu> with SingleTickerProviderStateMixin {
         gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          colors: [const Color(0xFF6C63FF), const Color(0xFF5B54E8)],
+          colors: [colors.primary, colors.secondary],
         ),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF6C63FF).withOpacity(0.4),
+            color: colors.primary.withOpacity(0.4),
             blurRadius: 20,
             offset: const Offset(0, 8),
           ),
@@ -103,7 +103,8 @@ class _MenuState extends State<Menu> with SingleTickerProviderStateMixin {
     );
   }
 
-  Widget _buildBottomNavBar() {
+  // ===== Bottom Navigation =====
+  Widget _buildBottomNavBar(BuildContext context) {
     return Container(
       margin: const EdgeInsets.only(left: 16, right: 16, bottom: 20),
       height: 70,
@@ -114,7 +115,7 @@ class _MenuState extends State<Menu> with SingleTickerProviderStateMixin {
           BoxShadow(
             color: Colors.black.withOpacity(0.08),
             blurRadius: 30,
-            offset: const Offset(0, 10),
+            offset: const Offset(4, 8),
           ),
         ],
       ),
@@ -123,28 +124,30 @@ class _MenuState extends State<Menu> with SingleTickerProviderStateMixin {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            _buildNavItem(0, 'assets/icons/home.png'),
-            _buildNavItem(1, 'assets/icons/light.png'),
-            const SizedBox(width: 64), // พื้นที่สำหรับปุ่ม +
-            _buildNavItem(2, 'assets/icons/bell.png'),
-            _buildNavItem(3, 'assets/icons/profile.png'),
+            _buildNavItem(context, 0, 'assets/icons/home.png'),
+            _buildNavItem(context, 1, 'assets/icons/light.png'),
+            const SizedBox(width: 64),
+            _buildNavItem(context, 2, 'assets/icons/bell.png'),
+            _buildNavItem(context, 3, 'assets/icons/profile.png'),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildNavItem(int index, String iconPath) {
+  // ===== Nav Item =====
+  Widget _buildNavItem(BuildContext context, int index, String iconPath) {
     final isSelected = _currentPage == index;
+    final theme = Theme.of(context);
+    final colors = theme.colorScheme;
 
     return Expanded(
       child: GestureDetector(
         onTap: () => _onItemTapped(index),
         behavior: HitTestBehavior.opaque,
-        child: Container(
+        child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 12),
           child: Column(
-            mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               AnimatedScale(
@@ -155,10 +158,7 @@ class _MenuState extends State<Menu> with SingleTickerProviderStateMixin {
                   iconPath,
                   height: 26,
                   width: 26,
-                  color:
-                      isSelected
-                          ? const Color(0xFF6C63FF)
-                          : const Color(0xFFB0B0B0),
+                  color: isSelected ? colors.primary : theme.disabledColor,
                 ),
               ),
               if (isSelected) ...[
@@ -169,10 +169,7 @@ class _MenuState extends State<Menu> with SingleTickerProviderStateMixin {
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     gradient: LinearGradient(
-                      colors: [
-                        const Color(0xFF6C63FF),
-                        const Color(0xFF5B54E8),
-                      ],
+                      colors: [colors.primary, colors.secondary],
                     ),
                   ),
                 ),
