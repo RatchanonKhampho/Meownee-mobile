@@ -2,7 +2,7 @@
 
 import 'dart:async';
 
-import 'package:meownee/blank_page/dialog_fail.dart';
+import 'package:meownee/blank_page/dialog.dart';
 import 'package:meownee/login.dart';
 import 'package:meownee/menu.dart';
 import 'package:flutter/material.dart';

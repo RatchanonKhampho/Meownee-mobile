@@ -1,22 +1,19 @@
 import 'package:flutter/material.dart';
-import '../models/wallet.dart';
+import 'package:meownee/models/wallet_model.dart';
 
-/// จำลองข้อมูลแบบ API (JSON)
-final List<Map<String, dynamic>> walletJsonData = [
-  {
-    "name": "เงินสด",
-    "balance": 5000,
-    "icon": Icons.money.codePoint,
-    "color": Colors.green.value,
-  },
-  {
-    "name": "ธนาคาร",
-    "balance": 20000,
-    "icon": Icons.account_balance.codePoint,
-    "color": Colors.blue.value,
-  },
+List<Wallet> mockWallets = [
+  Wallet(
+    id: '1',
+    name: 'เงินสด',
+    icon: Icons.wallet,
+    color: Colors.orange,
+    balance: 1000.00,
+  ),
+  Wallet(
+    id: '2',
+    name: 'ธนาคาร',
+    icon: Icons.account_balance,
+    color: Colors.blue,
+    balance: 20000.00,
+  ),
 ];
-
-/// แปลง JSON → List<Wallet>
-final List<Wallet> wallets =
-    walletJsonData.map((json) => Wallet.fromJson(json)).toList();

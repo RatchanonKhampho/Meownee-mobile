@@ -1,8 +1,7 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:meownee/home.dart';
-import 'package:meownee/notification.dart';
-import 'package:meownee/profile.dart';
+
 import 'package:meownee/test.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -22,7 +21,12 @@ class _MenuState extends State<Menu> {
 
   @override
   void initState() {
-    pages = <Widget>[HomePage(), TestPage(), NotificationList(), ProfilePage()];
+    pages = <Widget>[
+      HomePage(),
+      TestPage(),
+      // NotificationList(),
+      // ProfilePage(),
+    ];
     super.initState();
   }
 
@@ -124,11 +128,15 @@ class _MenuState extends State<Menu> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            _buildNavItem(context, 0, 'assets/icons/home.png'),
-            _buildNavItem(context, 1, 'assets/icons/light.png'),
+            _buildNavItem(
+              context,
+              0,
+              'assets/icons/chart-pie-simple-circle-dollar.png',
+            ),
+            // _buildNavItem(context, 1, 'assets/icons/light.png'),
             const SizedBox(width: 64),
-            _buildNavItem(context, 2, 'assets/icons/bell.png'),
-            _buildNavItem(context, 3, 'assets/icons/profile.png'),
+            // _buildNavItem(context, 2, 'assets/icons/bell.png'),
+            _buildNavItem(context, 1, 'assets/icons/apps-add.png'),
           ],
         ),
       ),
